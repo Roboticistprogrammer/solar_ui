@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Solar Washer Drone Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brand"><span class="drone-icon">✣</span><strong>Solar Panel Cleaning Drone</strong></div>
+      <nav>
+        <a class="active" href="#">▦ Dashboard</a>
+        <a href="#">◉ Live View</a>
+        <a href="#">⌁ Mission Tracker</a>
+        <a href="#">□ Flight Logs</a>
+        <a href="#">⚙ Maintenance</a>
+        <a href="#">△ Alerts</a>
+      </nav>
+      <section class="drone-card">
+        <small>Drone ID</small>
+        <strong id="drone-id">SPCD-001</strong>
+        <span class="online">● Online</span>
+        <div class="drone-silhouette">✣</div>
+        <button>Return to Home in QGC</button>
+      </section>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <h1>Mission: <span id="mission-name">Rooftop Plant A</span> <span class="pill">In Progress</span></h1>
+          <p>Start Time: <span id="start-time">09:15</span> • Elapsed Time: <span id="elapsed">00:18:24</span></p>
+        </div>
+        <div class="status-strip">
+          <span>▥ <strong id="rc-link">Strong</strong><small>RC Link</small></span>
+          <span>☁ <strong>Connected</strong><small>Cloud</small></span>
+          <span>☀ <strong id="weather">28°C</strong><small>Sunny</small></span>
+          <button class="danger">End Mission in QGC</button>
+        </div>
+      </header>
+
+      <section class="grid">
+        <article class="card camera">
+          <div class="card-title"><h2>Live Camera Feed</h2><span class="live">● Live</span></div>
+          <div class="panel-field">
+            <div class="panel-lines"></div>
+            <div class="washer-drone">✣</div>
+            <div class="wash-trail"></div>
+          </div>
+          <div class="camera-controls"><button>HD⌄</button><button>📷</button><button>▣</button></div>
+        </article>
+
+        <article class="card battery">
+          <h2>Battery Status</h2>
+          <div class="battery-layout">
+            <div class="ring"><span id="battery-percent">76%</span><small>Battery</small></div>
+            <dl>
+              <dt>Voltage</dt><dd id="voltage">48.1 V</dd>
+              <dt>Current</dt><dd id="current">18.6 A</dd>
+              <dt>Remaining Time</dt><dd id="battery-time">28 min</dd>
+            </dl>
+          </div>
+        </article>
+
+        <article class="card progress">
+          <h2>Mission Progress</h2>
+          <div class="progress-body">
+            <div class="ring blue"><span id="percent-complete">65%</span><small>Area Completed</small></div>
+            <dl>
+              <dt>Total Area</dt><dd id="total-area">1,200 m²</dd>
+              <dt>Cleaned Area</dt><dd id="cleaned-area">780 m²</dd>
+              <dt>Remaining Area</dt><dd id="remaining-area">420 m²</dd>
+            </dl>
+            <div class="coverage-map" aria-label="Coverage map">
+              <span class="zone cleaned z1">Z1</span>
+              <span class="zone cleaned z2">Z2</span>
+              <span class="zone active z3">Z3 ✣</span>
+              <span class="zone planned z4">Z4</span>
+              <span class="zone planned z5">Z5</span>
+            </div>
+          </div>
+          <footer>● Drone is cleaning on automated path <span>Estimated Time Remaining: <strong id="eta">00:12:43</strong></span></footer>
+        </article>
+
+        <article class="card comms">
+          <h2>Communication</h2>
+          <div class="metric-row">▥ RC Link <strong id="rc-status">Strong</strong><small id="rc-rssi">-65 dBm</small></div>
+          <div class="metric-row">▣ Video Link <strong id="video-status">Stable</strong><small id="video-rssi">-61 dBm</small></div>
+        </article>
+
+        <article class="card cleaning">
+          <h2>Cleaning System</h2>
+          <div class="metric-row">Water Level <strong id="water">68%</strong></div>
+          <div class="metric-row">Water Flow <strong id="flow">2.5 L/min</strong></div>
+          <div class="metric-row">Pump Status <strong id="pump">On</strong></div>
+          <div class="metric-row">Active Zone <strong id="zone">Zone 3</strong></div>
+        </article>
+
+        <article class="card drone-status">
+          <h2>Drone Status</h2>
+          <div class="metric-row">Mode <strong id="mode">Auto Clean</strong></div>
+          <div class="metric-row">Altitude <strong id="altitude">8.2 m</strong></div>
+          <div class="metric-row">Speed <strong id="speed">1.2 m/s</strong></div>
+          <div class="metric-row">GPS <strong id="gps">3D RTK</strong></div>
+        </article>
+
+        <article class="card alerts">
+          <div class="card-title"><h2>Alerts & Notifications</h2><a href="#">View All</a></div>
+          <ul id="alerts"></ul>
+        </article>
+      </section>
+    </main>
+    <script src="/static/dashboard.js"></script>
+  </body>
+</html>
