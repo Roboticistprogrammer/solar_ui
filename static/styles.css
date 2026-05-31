@@ -1,0 +1,145 @@
+:root {
+  color-scheme: dark;
+  --bg: #07111f;
+  --panel: #111c2c;
+  --panel-2: #15243a;
+  --border: #26364d;
+  --text: #edf4ff;
+  --muted: #9aa8bc;
+  --green: #62d283;
+  --blue: #5b91ff;
+  --red: #ff6f6f;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #122442, var(--bg) 45%);
+  color: var(--text);
+}
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background: rgba(5, 12, 23, 0.72);
+}
+.brand { display: flex; align-items: center; gap: 12px; font-size: 18px; }
+.drone-icon { font-size: 36px; color: white; }
+nav { display: grid; gap: 12px; }
+nav a {
+  color: #c7d2e3;
+  text-decoration: none;
+  padding: 16px 18px;
+  border-radius: 10px;
+}
+nav a.active { background: #1d3154; color: #64a0ff; }
+.drone-card {
+  margin-top: auto;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--panel), #0b1727);
+  border-radius: 12px;
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+}
+.online, .live { color: var(--green); }
+.drone-silhouette { font-size: 76px; text-align: center; color: #d7e2ef; opacity: 0.75; }
+button {
+  border: 1px solid #376199;
+  border-radius: 8px;
+  padding: 11px 16px;
+  background: #122849;
+  color: #64a0ff;
+  font: inherit;
+}
+main { padding: 26px 32px; }
+.topbar { display: flex; justify-content: space-between; gap: 24px; align-items: center; margin-bottom: 24px; }
+h1, h2, p { margin: 0; }
+h1 { font-size: 20px; font-weight: 650; }
+h2 { font-size: 17px; }
+p, small, dt { color: var(--muted); }
+.pill { color: var(--green); border: 1px solid #2c8a52; border-radius: 9px; padding: 6px 12px; font-size: 14px; margin-left: 10px; }
+.status-strip { display: flex; align-items: center; gap: 22px; }
+.status-strip span { display: grid; gap: 2px; color: var(--green); }
+.status-strip small { color: var(--muted); }
+.danger { color: #ff8d8d; border-color: #a33b3b; background: transparent; }
+.grid {
+  display: grid;
+  grid-template-columns: minmax(420px, 2fr) minmax(290px, 0.85fr);
+  gap: 18px;
+}
+.card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(22, 35, 54, 0.96), rgba(11, 22, 36, 0.96));
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  padding: 18px;
+}
+.card-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.camera, .progress, .alerts { grid-column: 1; }
+.battery, .comms, .cleaning, .drone-status { grid-column: 2; }
+.panel-field {
+  min-height: 330px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #334156, #162131 45%, #26374f);
+}
+.panel-lines {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(#d9e3ee80 1px, transparent 1px), linear-gradient(90deg, #d9e3ee80 1px, transparent 1px);
+  background-size: 86px 58px;
+  transform: perspective(700px) rotateX(52deg) scale(1.35);
+  transform-origin: center top;
+}
+.washer-drone { position: absolute; inset: 42% auto auto 50%; transform: translate(-50%, -50%); font-size: 58px; color: #111; text-shadow: 0 0 18px white; }
+.wash-trail { position: absolute; left: 42%; top: 45%; width: 190px; height: 95px; border-radius: 50%; background: #e7edf740; filter: blur(10px); }
+.camera-controls { position: absolute; margin-top: -58px; margin-left: 18px; display: flex; gap: 10px; }
+.ring {
+  width: 135px; height: 135px; border-radius: 50%; display: grid; place-content: center; text-align: center;
+  background: conic-gradient(var(--green) 0 76%, #25334a 76% 100%);
+  position: relative;
+}
+.ring::after { content: ""; position: absolute; inset: 12px; border-radius: inherit; background: var(--panel); }
+.ring span, .ring small { position: relative; z-index: 1; }
+.ring span { font-size: 30px; color: var(--green); font-weight: 800; }
+.ring.blue { background: conic-gradient(var(--blue) 0 65%, #25334a 65% 100%); }
+.ring.blue span { color: var(--blue); }
+.battery-layout, .progress-body { display: flex; align-items: center; gap: 28px; }
+dl { display: grid; grid-template-columns: 1fr; gap: 2px; margin: 0; }
+dd { margin: 0 0 10px; font-weight: 700; }
+.coverage-map {
+  flex: 1; min-height: 160px; border: 1px solid var(--border); border-radius: 9px; position: relative; overflow: hidden;
+  background-image: linear-gradient(#ffffff0a 1px, transparent 1px), linear-gradient(90deg, #ffffff0a 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.zone { position: absolute; display: grid; place-items: center; border: 1px dashed #d7e6ff; color: white; font-size: 12px; }
+.cleaned { background: #4f86f7bf; }
+.active { background: #62d283bf; }
+.planned { background: #52607285; }
+.z1 { left: 10%; top: 58%; width: 32%; height: 34%; }
+.z2 { left: 42%; top: 47%; width: 30%; height: 45%; }
+.z3 { left: 34%; top: 14%; width: 36%; height: 34%; }
+.z4 { left: 70%; top: 22%; width: 18%; height: 35%; }
+.z5 { left: 72%; top: 59%; width: 18%; height: 33%; }
+.progress footer { display: flex; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 14px; color: var(--muted); }
+.metric-row { display: flex; justify-content: space-between; gap: 18px; border: 1px solid var(--border); border-radius: 9px; padding: 14px; margin-top: 12px; color: #cbd6e5; }
+.metric-row strong { color: var(--green); }
+.alerts a { color: var(--blue); text-decoration: none; }
+ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+li { display: flex; gap: 12px; padding: 12px; border-top: 1px solid var(--border); color: #d8e0ed; }
+.warning { color: #ffd166; }
+.info { color: var(--green); }
+@media (max-width: 1100px) {
+  body { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .topbar, .status-strip, .progress-body { flex-wrap: wrap; }
+  .grid { grid-template-columns: 1fr; }
+  .camera, .progress, .alerts, .battery, .comms, .cleaning, .drone-status { grid-column: 1; }
+}

@@ -1,0 +1,10 @@
+[project]
+name = "solar-ui"
+version = "0.1.0"
+description = "Monitoring dashboard prototype for an autonomous solar panel washer drone."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.uv]
+package = false
