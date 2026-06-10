@@ -3,9 +3,112 @@
 This repository defines the product direction and implementation plan for a monitoring dashboard used during autonomous solar panel washing missions. The overall vehicle stack is expected to use PX4, MAVLink, ROS/ROS 2, and QGroundControl (QGC). This dashboard is intentionally **not** a replacement for QGC: QGC remains the ground control station for vehicle setup, mission upload, safety actions, and pilot/operator control. The dashboard focuses on mission visualization, operational awareness, cleaning productivity, fleet/asset tracking, and post-mission review.
 
 
-## Quickstart
+## Current MVP Stage
 
-This prototype now includes a `uv` managed Python application that serves a read-only dashboard shell and deterministic simulated telemetry using the standard library, so the first build works without external package downloads.
+The active MVP is now a single-branch dashboard stack:
+
+- `backend/`: read-only Node.js telemetry gateway for PX4 MAVLink, simulated fallback data, camera stream configuration, REST endpoints, and Server-Sent Events.
+- `frontend/`: React/Vite mission dashboard that renders PX4 telemetry, mission progress, alerts, and a browser-renderable downward camera stream.
+- `app/` and `static/`: the original Python/static prototype kept as a lightweight fallback and reference while the React MVP is built out.
+
+The dashboard does **not** send arming, takeoff, landing, navigation, pump, or emergency commands. QGroundControl remains the command authority.
+
+## Quickstart: React MVP
+
+Start the backend:
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+In another terminal, start the frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open <http://127.0.0.1:5173>. The frontend proxies `/api` to <http://127.0.0.1:5000>.
+
+Useful backend endpoints:
+
+- <http://127.0.0.1:5000/api/health>
+- <http://127.0.0.1:5000/api/telemetry>
+- <http://127.0.0.1:5000/api/telemetry/stream>
+- <http://127.0.0.1:5000/api/video/config>
+
+If PX4 is not running, the dashboard stays usable with simulated mission data and warning alerts.
+
+## PX4 SITL Telemetry
+
+The backend listens for PX4 MAVLink UDP packets on `0.0.0.0:14550` by default.
+
+```bash
+PX4_MAVLINK_PORT=14550 npm start
+```
+
+When PX4 SITL sends MAVLink to that port, the dashboard switches from `Simulation Fallback` to `PX4 MAVLink Live` and publishes normalized telemetry to the UI at `/api/telemetry/stream`.
+
+For a local PX4 setup, route MAVLink to the backend port using your preferred PX4/QGC/MAVLink Router configuration. Keep QGC connected separately for mission upload and operator control.
+
+## PX4 x500_camera_down Video
+
+Browsers cannot render Gazebo transport topics or RTSP directly. The backend supports two camera paths.
+
+### Option A: Use the Built-In Gazebo Topic Bridge
+
+Start the backend with Gazebo camera auto-discovery enabled:
+
+```bash
+cd backend
+GZ_CAMERA_AUTO_START=true npm start
+```
+
+Then start the frontend and open <http://127.0.0.1:5173>. After `x500_camera_down` is spawned, the backend searches Gazebo topics for a camera/image stream and exposes it as:
+
+```text
+http://127.0.0.1:5000/api/video/mjpeg
+```
+
+If auto-discovery misses the topic, list available Gazebo topics and set the topic explicitly:
+
+```bash
+gz topic -l
+GZ_CAMERA_TOPIC=/world/default/model/x500_camera_down_0/link/camera_link/sensor/camera/image GZ_CAMERA_AUTO_START=true npm start
+```
+
+You can also start discovery from the dashboard camera panel with **Start Gazebo Bridge**, or call:
+
+```bash
+curl -X POST http://127.0.0.1:5000/api/video/gz/start
+```
+
+### Option B: Provide an Existing Browser Stream
+
+Bridge the `x500_camera_down` camera to a browser-renderable stream yourself, then pass that URL to the backend:
+
+```bash
+PX4_CAMERA_URL=http://127.0.0.1:8080/stream.mjpg PX4_CAMERA_KIND=mjpeg npm start
+```
+
+Supported frontend stream kinds:
+
+- `mjpeg`: rendered with an `<img>` tag.
+- `image`: rendered with an `<img>` tag.
+- `video`: rendered with a native `<video>` tag for browser-supported formats such as MP4/WebM.
+- `hls`: exposed to the `<video>` tag for browser/player support.
+- `rtsp`: detected, but shown as requiring a bridge because browsers cannot display it directly.
+
+The built-in Gazebo bridge uses `gz topic -e --json-output`, so it requires the Gazebo CLI to be available on `PATH`. Set `GZ_COMMAND=/path/to/gz` if needed.
+
+The ROS/nozzle/payload packages are intentionally outside this repository. This dashboard only displays the normalized cleaning fields it receives.
+
+## Legacy Static Prototype
+
+The initial Python prototype still runs without external application dependencies:
 
 ```bash
 uv sync
@@ -18,6 +121,7 @@ For automated checks, run:
 
 ```bash
 uv run python -m unittest discover -s tests
+cd backend && npm test
 ```
 
 See [`docs/issues.md`](docs/issues.md) for the issue backlog required to complete the build.

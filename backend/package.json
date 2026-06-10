@@ -1,0 +1,15 @@
+{
+  "name": "solar-ui-backend",
+  "version": "0.1.0",
+  "description": "Read-only PX4 telemetry and video gateway for the solar washer dashboard.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {}
+}
